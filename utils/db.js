@@ -29,12 +29,17 @@ class DBClient {
   }
 
   async addUser(email, password) {
-    return this.client.db().collection('users').insertOne(
-      {
-        email,
-        password: sha1(password),
-      },
-    );
+    try {
+      const result = await this.client.db().collection('users').insertOne(
+        {
+          email,
+          password: sha1(password),
+        },
+      );
+      return result;
+    } catch (err) {
+      throw new Error('Failed to add user');
+    }
   }
 }
 

@@ -5,19 +5,27 @@ export default class UsersController {
     const { email } = request.body;
     const { password } = request.body;
 
-    if (email === undefined) {
-      response.json({ error: 'Missing email' }).statusCode(400);
+    if (email === undefined || email === null) {
+      response.status(400);
+      response.json({ error: 'Missing email' });
     }
-    if (password === undefined) {
-      response.json({ error: 'Missing password' }).statusCode(400);
+    if (password === undefined || password === null) {
+      response.status(400);
+      response.json({ error: 'Missing password' });
     }
+    try {
+      const findResult = await dbClient.isRegistered(email);
 
-    const findResult = await dbClient.isRegistered(email);
-    if (findResult === undefined) {
-      const infos = await dbClient.addUser(email, password);
-      response.json({ id: infos.insertedId, email });
-    } else {
-      response.json({ error: 'Already exist' }).statusCode(400);
+      if (findResult === null) {
+        const infos = await dbClient.addUser(email, password);
+        response.json({ id: infos.insertedId, email });
+      } else {
+        response.status(400);
+        response.json({ error: 'Already exist' });
+      }
+    } catch (err) {
+      response.status(400);
+      response.json({ error: 'Something went wrong' });
     }
   }
 }

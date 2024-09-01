@@ -11,7 +11,7 @@ export default class UsersController {
     }
     if (password === undefined || password === null) {
       response.status(400);
-      response.json({ error: 'Missing password' });
+      response.json({ error: 'Missing password' }).status(201);
     }
     try {
       const findResult = await dbClient.isRegistered(email);

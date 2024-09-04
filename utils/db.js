@@ -1,8 +1,10 @@
 import { MongoClient } from 'mongodb';
 import sha1 from 'sha1';
+import envLoader from './env_loader';
 
 class DBClient {
   constructor() {
+    envLoader();
     const host = process.env.DB_HOST || 'localhost';
     const port = process.env.DB_PORT || '27017';
     const db = process.env.DB_DATABASE || 'files_manager';
@@ -41,6 +43,15 @@ class DBClient {
       throw new Error('Failed to add user');
     }
   }
+
+  async filesCollection() {
+    return this.client.db().collection('files');
+  }
+
+  async usersCollection() {
+    return this.client.db().collection('users');
+  }
+
 }
 
 const dbClient = new DBClient();

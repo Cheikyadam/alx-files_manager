@@ -22,7 +22,7 @@ export default class AuthController {
         res.status(401).json({ error: 'Unauthorized' });
       } else {
         const token = uuidv4();
-        await redisClient.set(`auth_${token}`, findResult._id, 24 * 60 * 60);
+        await redisClient.set(`auth_${token}`, findResult._id.toString(), 24 * 60 * 60);
         res.json({ token });
       }
     } catch (err) {

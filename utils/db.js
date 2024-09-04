@@ -51,7 +51,6 @@ class DBClient {
   async usersCollection() {
     return this.client.db().collection('users');
   }
-
 }
 
 const dbClient = new DBClient();
